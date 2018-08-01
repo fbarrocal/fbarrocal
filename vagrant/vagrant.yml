@@ -1,0 +1,7 @@
+#site specific settings
+box:
+  name: rymes
+  ip: 192.168.2.101
+  hostname: rymes.tyuiopas.net
+site:
+  public_html: sources\rymes
