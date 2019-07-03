@@ -1,0 +1,15 @@
+Host github.com
+    Hostname github.com
+    Port 22
+    IdentityFile ~/.ssh/nebula_git-id_rsa
+	IdentitiesOnly yes
+Host bitbucket.com
+    Hostname bitbucket.org
+    Port 22
+    IdentityFile ~/.ssh/nebula_git-id_rsa
+	IdentitiesOnly yes
+Host purposebuiltsoftware.com
+    Hostname purposebuiltsoftware.com
+    Port 22
+    IdentityFile ~/.ssh/nebula_pbs-id_rsa
+	IdentitiesOnly yes

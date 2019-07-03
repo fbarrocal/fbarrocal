@@ -2,28 +2,41 @@
 # vi: set ft=ruby :
 
 require 'yaml'
-settings = YAML::load(File.read("#{File.dirname(__FILE__)}/vagrant.yml"))
+if File.exists?("#{File.dirname(__FILE__)}/config/vagrant/default.yml")
+	settings = YAML::load(File.read("#{File.dirname(__FILE__)}/vagrant/default.yml"))
+end
+if File.exists?("#{File.dirname(__FILE__)}/config/vagrant/local.yml")
+	settings.merge!(YAML::load(File.read("#{File.dirname(__FILE__)}/vagrant/local.yml")))
+end
 
 Vagrant.configure("2") do |config|
 
-    config.vm.box = "scotch/box"
-    config.vm.define settings['box']['name']
+    config.vm.box = settings['box']
+    config.vm.define settings['vm']['name']
 
-    config.vm.network "private_network", ip: settings['box']['ip']
-    config.vm.hostname = settings['box']['hostname']
+    config.vm.network "private_network", ip: settings['vm']['ip']
+    config.vm.hostname = settings['vm']['hostname']
 
     config.vm.synced_folder settings['site']['public_html'], "/var/www", :mount_options => ["dmode=777", "fmode=666"]
 
-    config.hostmanager.enabled = true
-    config.hostmanager.manage_host = true
-    config.hostmanager.manage_guest = false
+	#------------
+	# Hostmanager
+	#------------
+	if Vagrant.has_plugin?('hostmanager')
+		config.hostmanager.enabled = true
+		config.hostmanager.manage_host = true
+		config.hostmanager.manage_guest = false
+	end
+	
+	#------------
+	# Provision
+	#------------
+	config.vm.provision "shell", inline: <<-SHELL
+		echo "Pointing main site to Project Main Folder"
+		sudo sed -i s,/var/www/public,/var/www/,g /etc/apache2/sites-available/000-default.conf
 
-      config.vm.provision "shell", inline: <<-SHELL
-        echo "Pointing main site to Project Main Folder"
-        sudo sed -i s,/var/www/public,/var/www/,g /etc/apache2/sites-available/000-default.conf
-
-        echo "So let's restart apache..."
-        sudo service apache2 restart
-      SHELL
+		echo "So let's restart apache..."
+		sudo service apache2 restart
+	SHELL
 
 end

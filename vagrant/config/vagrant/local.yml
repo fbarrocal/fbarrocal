@@ -1,0 +1,8 @@
+#site specific settings
+box: "scotch/box"
+vm:
+  name: tyuiopas
+  ip: 192.168.2.101
+  hostname: vm.tyuiopas.net
+site:
+  public_html: sources/www

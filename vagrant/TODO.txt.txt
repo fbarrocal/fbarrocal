@@ -1,0 +1,3 @@
+Add details to import SQL for config/vagrant/database
+Add details to copyu Keys in config/vagrant/ssh_keys
+

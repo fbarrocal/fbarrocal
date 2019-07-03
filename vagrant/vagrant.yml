@@ -1,7 +1,0 @@
-#site specific settings
-box:
-  name: project
-  ip: 192.168.2.x
-  hostname: project.tyuiopas.net
-site:
-  public_html: sources\project
